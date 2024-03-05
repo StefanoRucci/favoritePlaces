@@ -1,30 +1,16 @@
 import axios from "axios";
 
-import storage from "../firebaseConfig";
 import { firebaseConfig } from "../firebaseConfig";
 
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  uploadString,
-  uploadBytes,
-} from "firebase/storage";
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
-
-const BACKEND_URL_DATABASE =
-  "https://mobileapplication-aaa97-default-rtdb.firebaseio.com";
-
-const BACKEND_URL_STORAGE = "mobileapplication-aaa97.appspot.com";
+import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 async function uploadImageToStorage(imageUri) {
   try {
     // Ottieni un'istanza di Firebase Storage
     const storage = getStorage();
 
-     // Genera un nome univoco per il file
-     const fileName = `${Date.now()}_${Math.floor(Math.random() * 1000000)}.jpg`;
+    // Genera un nome univoco per il file
+    const fileName = `${Date.now()}_${Math.floor(Math.random() * 1000000)}.jpg`;
 
     // Ottieni un riferimento al percorso nel bucket di storage dove desideri salvare l'immagine
     const storageRef = ref(storage, "images/" + fileName);
@@ -54,7 +40,6 @@ async function uploadImageToStorage(imageUri) {
 }
 
 export const storePlace = async (place) => {
-  // console.log(place.image)
   const imageURL = await uploadImageToStorage(place.imageUri);
   place.imageUri = imageURL;
   const response = await axios.post(
@@ -67,7 +52,9 @@ export const storePlace = async (place) => {
 
 export const fetchPlaces = async () => {
   try {
-    const response = await axios.get(firebaseConfig.databaseURL + "/places.json");
+    const response = await axios.get(
+      firebaseConfig.databaseURL + "/places.json"
+    );
     const places = [];
     const storage = getStorage();
 
@@ -86,7 +73,10 @@ export const fetchPlaces = async () => {
     }
     return places;
   } catch (error) {
-    console.error('Si è verificato un errore durante il recupero dei luoghi:', error);
+    console.error(
+      "Si è verificato un errore durante il recupero dei luoghi:",
+      error
+    );
     throw error;
   }
 };
