@@ -1,7 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import AppLoading from "expo-app-loading";
+import * as SplashScreen from "expo-splash-screen"; 
 
 import AllPlaces from "./screens/AllPlaces";
 import AddPlace from "./screens/AddPlace";
@@ -85,12 +88,46 @@ function Navigation() {
   );
 }
 
+function Root() {
+  const [isTryingLogin, setIsTryingLogin] = useState(true);
+  const authCtx = useContext(AuthContext)
+
+  useEffect(() => {
+    const initializeApp = async () => {
+      try {
+        // Nascondi lo splash screen
+        await SplashScreen.hideAsync();
+
+        // Carica il token salvato in AsyncStorage
+        const storedToken = await AsyncStorage.getItem("token");
+
+        if (storedToken) {
+          // Se il token esiste, autentica l'utente
+          authCtx.authenticate(storedToken);
+        }
+      } catch (error) {
+        console.error("Error initializing app:", error);
+      } finally {
+        // Una volta completata l'inizializzazione, imposta isTryingLogin a false
+        setIsTryingLogin(false);
+      }
+    };
+    initializeApp();
+  }, []);
+
+  if (isTryingLogin) {
+    return null; // Rimuovi <AppLoading />
+  }
+
+  return <Navigation />
+}
+
 export default function App() {
   return (
     <>
       <StatusBar style="dark" />
       <AuthContextProvider>
-        <Navigation />
+        <Root />
       </AuthContextProvider>
     </>
   );

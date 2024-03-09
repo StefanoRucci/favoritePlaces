@@ -29,7 +29,7 @@ function AllPlaces({ route }) {
       setRefreshing(true);
       getPlaces();
     }
-  }, [isFocused]);
+  }, [isFocused, token]);
 
   const onRefresh = () => {
     setRefreshing(true);
