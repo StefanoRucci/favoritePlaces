@@ -1,36 +1,19 @@
 import axios from "axios";
 
 import { firebaseConfig } from "../firebaseConfig";
-
 import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 async function uploadImageToStorage(imageUri) {
   try {
-    // Ottieni un'istanza di Firebase Storage
     const storage = getStorage();
-
-    // Genera un nome univoco per il file
     const fileName = `${Date.now()}_${Math.floor(Math.random() * 1000000)}.jpg`;
-
-    // Ottieni un riferimento al percorso nel bucket di storage dove desideri salvare l'immagine
     const storageRef = ref(storage, "images/" + fileName);
-
-    // Effettua una richiesta HTTP per ottenere il contenuto dell'immagine dall'URI
     const response = await fetch(imageUri);
     const blob = await response.blob();
-
-    // Carica l'immagine nel bucket
     const snapshot = await uploadBytes(storageRef, blob);
-
-    // Ottieni l'URL di download dell'immagine
     const downloadURL = await getDownloadURL(snapshot.ref);
-
-    console.log(
-      "Immagine caricata con successo nel bucket di Firebase Storage",
-      downloadURL
-    );
-
     return downloadURL;
+
   } catch (error) {
     console.error(
       "Si è verificato un errore durante il caricamento dell'immagine:",
@@ -56,22 +39,28 @@ export const fetchPlaces = async (token) => {
       firebaseConfig.databaseURL + "/places.json?auth=" + token
     );
     const places = [];
-    const storage = getStorage();
+    const imagePromises = [];
 
     for (const key in response.data) {
       const placeData = response.data[key];
-
+      const imagePromise = placeData.imageUri;
+      imagePromises.push(imagePromise);
       const placeObj = {
         id: key,
         title: placeData.title,
         address: placeData.address,
         date: new Date(placeData.date),
         location: placeData.location,
-        image: placeData.imageUri,
+        image: null,
       };
       places.push(placeObj);
     }
+    const imageUrls = await Promise.all(imagePromises);
+    places.forEach((place, index) => {
+      place.image = imageUrls[index];
+    });
     return places;
+
   } catch (error) {
     console.error(
       "Si è verificato un errore durante il recupero dei luoghi:",

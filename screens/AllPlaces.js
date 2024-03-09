@@ -16,26 +16,29 @@ function AllPlaces({ route }) {
   const authCtx = useContext(AuthContext);
   const token = authCtx.token;
 
-  const getPlaces = async () => {
-    try {
-      setIsFetching(true);
-      const places = await fetchPlaces(token);
-      setIsFetching(false);
-      setLoadedPlaces(places);
-      setRefreshing(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    if (isFocused) {
-      setRefreshing(true);
-      getPlaces();
+    let isMounted = true;
+    async function fetchData() {
+      try {
+        setIsFetching(true);
+        const places = await fetchPlaces(token);
+        if (isMounted) {
+          setLoadedPlaces(places);
+          setIsFetching(false);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
-  }, [isFocused, token]);
 
-  if(isFetching){
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [token]);
+
+  if(isFetching || refreshing){
     return <LoadingOverlay />
   }
 

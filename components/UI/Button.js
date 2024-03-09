@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         paddingVertical: 8,
         margin: 4,
-        backgroundColor: Colors.primary800,
+        backgroundColor: Colors.primary700,
         elevation: 2,
         shadowColor: "black",
         shadowOpacity: 0.15,
