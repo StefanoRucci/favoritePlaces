@@ -41,9 +41,10 @@ const ImagePicker = ({ onTakeImage }) => {
       aspect: [16, 9],
       quality: 0.5,
     });
-    //if(!image.canceled)
-    setPickedImage(image.assets[0].uri);
-    onTakeImage(image.assets[0].uri);
+    if (!image.canceled) {
+      setPickedImage(image.assets[0].uri);
+      onTakeImage(image.assets[0].uri);
+    }
   };
 
   let imagePreview = <Text>No image taken yet.</Text>;

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import PlacesList from "../components/Places/PlacesList";
 import { fetchPlaces } from "../util/http";
-import { Alert } from "react-native";
 
 function AllPlaces({ route }) {
   const [loadedPlaces, setLoadedPlaces] = useState([]);
