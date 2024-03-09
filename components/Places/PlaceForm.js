@@ -7,12 +7,19 @@ import ImagePicker from "./ImagePicker";
 import LocationPicker from "./LocationPicker";
 import Button from "../UI/Button";
 
+import { useContext } from "react";
+import { AuthContext } from "../../store/auth-context";
 import { storePlace } from "../../util/http";
+import LoadingOverlay from "../UI/LoadingOverlay";
 
 const PlaceForm = ({ onCreatePlace }) => {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [selectedImage, setSelectedImage] = useState();
   const [pickedLocation, setPickedLocation] = useState();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const authCtx = useContext(AuthContext);
+  const token = authCtx.token;
 
   const changeTitleHandler = (enteredText) => {
     setEnteredTitle(enteredText);
@@ -29,12 +36,17 @@ const PlaceForm = ({ onCreatePlace }) => {
   const savePlaceHandler = async() => {
     const placeData = new Place(enteredTitle, selectedImage, pickedLocation);
     try{
-      const id = await storePlace(placeData);
+      setIsSubmitting(true);
+      const id = await storePlace(placeData, token);
     }catch(err){
       console.log(err)
     }
     onCreatePlace(placeData);
   };
+
+  if(isSubmitting) {
+    return <LoadingOverlay />
+  }
 
   return (
     <ScrollView style={styles.form}>

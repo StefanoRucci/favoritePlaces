@@ -5,10 +5,12 @@ import { fetchPlaces } from "../util/http";
 
 import { useContext } from "react";
 import { AuthContext } from "../store/auth-context";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
 
 function AllPlaces({ route }) {
   const [loadedPlaces, setLoadedPlaces] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const isFocused = useIsFocused();
 
   const authCtx = useContext(AuthContext);
@@ -16,7 +18,9 @@ function AllPlaces({ route }) {
 
   const getPlaces = async () => {
     try {
+      setIsFetching(true);
       const places = await fetchPlaces(token);
+      setIsFetching(false);
       setLoadedPlaces(places);
       setRefreshing(false);
     } catch (error) {
@@ -30,6 +34,10 @@ function AllPlaces({ route }) {
       getPlaces();
     }
   }, [isFocused, token]);
+
+  if(isFetching){
+    return <LoadingOverlay />
+  }
 
   const onRefresh = () => {
     setRefreshing(true);
