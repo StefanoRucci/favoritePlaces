@@ -50,10 +50,10 @@ export const storePlace = async (place) => {
   return id;
 };
 
-export const fetchPlaces = async () => {
+export const fetchPlaces = async (token) => {  
   try {
     const response = await axios.get(
-      firebaseConfig.databaseURL + "/places.json"
+      firebaseConfig.databaseURL + "/places.json?auth=" + token
     );
     const places = [];
     const storage = getStorage();

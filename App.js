@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useContext } from 'react';
+import { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -7,11 +7,10 @@ import AllPlaces from "./screens/AllPlaces";
 import AddPlace from "./screens/AddPlace";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
-import WelcomeScreen from "./screens/WelcomeScreen";
 import IconButton from "./components/UI/IconButton";
 import { Colors } from "./constants/colors";
 import Map from "./screens/Map";
-import AuthContextProvider,  { AuthContext }  from "./store/auth-context";
+import AuthContextProvider, { AuthContext } from "./store/auth-context";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,7 +19,7 @@ function AuthStack() {
     <Stack.Navigator
       screenOptions={{
         headerStyle: { backgroundColor: Colors.primary500 },
-        headerTintColor: 'white',
+        headerTintColor: "white",
         contentStyle: { backgroundColor: Colors.primary100 },
       }}
     >
@@ -31,38 +30,47 @@ function AuthStack() {
 }
 
 function AuthenticatedStack() {
+  const authCtx = useContext(AuthContext);
   return (
-      <Stack.Navigator
-        screenOptions={{
-          headerStyle: { backgroundColor: Colors.primary500 },
-          headerTintColor: Colors.gray700,
-          contentStyle: { backgroundColor: Colors.gray700 },
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: Colors.primary500 },
+        headerTintColor: Colors.gray700,
+        contentStyle: { backgroundColor: Colors.gray700 },
+      }}
+    >
+      <Stack.Screen
+        name="AllPlaces"
+        component={AllPlaces}
+        options={({ navigation }) => ({
+          title: "Your Favorite Places",
+          headerRight: ({ tintColor }) => (
+            <IconButton
+              icon="add"
+              size={24}
+              color={tintColor}
+              onPress={() => navigation.navigate("AddPlace")}
+            />
+          ),
+          headerLeft: ({ tintColor }) => (
+            <IconButton
+              icon="exit"
+              color={tintColor}
+              size={24}
+              onPress={authCtx.logout}
+            />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="AddPlace"
+        component={AddPlace}
+        options={{
+          title: "Add a new Place",
         }}
-      >
-        <Stack.Screen
-          name="AllPlaces"
-          component={AllPlaces}
-          options={({ navigation }) => ({
-            title: "Your Favorite Places",
-            headerRight: ({ tintColor }) => (
-              <IconButton
-                icon="add"
-                size={24}
-                color={tintColor}
-                onPress={() => navigation.navigate("AddPlace")}
-              />
-            ),
-          })}
-        />
-        <Stack.Screen
-          name="AddPlace"
-          component={AddPlace}
-          options={{
-            title: "Add a new Place",
-          }}
-        />
-        <Stack.Screen name="Map" component={Map} /> 
-      </Stack.Navigator>
+      />
+      <Stack.Screen name="Map" component={Map} />
+    </Stack.Navigator>
   );
 }
 

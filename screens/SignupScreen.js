@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { Alert } from 'react-native';
 
 import AuthContent from '../components/Auth/AuthContent';
 import LoadingOverlay from '../components/UI/LoadingOverlay';
-import { createUser } from '../util/auth';
 import { AuthContext } from '../store/auth-context';
+import { createUser } from '../util/auth';
 
 function SignupScreen() {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
@@ -17,11 +18,11 @@ function SignupScreen() {
       authCtx.authenticate(token);
     } catch (error) {
       Alert.alert(
-        'Authentication failed!',
-        'Could not create user. Please check your credentials or try again later!'
+        'Authentication failed',
+        'Could not create user, please check your input and try again later.'
       );
+      setIsAuthenticating(false);
     }
-    setIsAuthenticating(false);
   }
 
   if (isAuthenticating) {
