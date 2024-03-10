@@ -1,11 +1,11 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text, View, RefreshControl } from 'react-native';
-
 import { Colors } from '../../constants/colors';
 import PlaceItem from './PlaceItem';
 import { useNavigation } from '@react-navigation/native';
+import LoadingOverlay from '../UI/LoadingOverlay';
 
-function PlacesList({ places, refreshing, onRefresh }) {
+function PlacesList({ places, refreshing, onRefresh, isFetching }) {
   const navigation = useNavigation();
 
   const selectPlaceHandler = (id, title, image, address, location) => {
@@ -18,11 +18,15 @@ function PlacesList({ places, refreshing, onRefresh }) {
     });
   }
 
+   if(isFetching && refreshing){
+     return <LoadingOverlay message="Loading places..."/>
+  }
+
   if (!places || places.length === 0) {
     return (
       <View style={styles.fallbackContainer}>
         <Text style={styles.fallbackText}>
-          No places added yet - start adding some!
+        No places added yet - start adding some!
         </Text>
       </View>
     );
