@@ -37,8 +37,8 @@ function AllPlaces({ route }) {
     }
   }, [isFocused, token, firstLoad, refreshing]);
 
-  if(isFetching || refreshing){
-    return <LoadingOverlay />
+  if ((isFetching || firstLoad) && !refreshing) {
+    return <LoadingOverlay />;
   }
 
   const onRefresh = () => {
