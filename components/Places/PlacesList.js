@@ -3,8 +3,17 @@ import { FlatList, StyleSheet, Text, View, RefreshControl } from 'react-native';
 
 import { Colors } from '../../constants/colors';
 import PlaceItem from './PlaceItem';
+import { useNavigation } from '@react-navigation/native';
 
 function PlacesList({ places, refreshing, onRefresh }) {
+  const navigation = useNavigation();
+
+  const selectPlaceHandler = (id) => {
+    navigation.navigate('PlaceDetails', {
+      placeId: id,
+    });
+  }
+
   if (!places || places.length === 0) {
     return (
       <View style={styles.fallbackContainer}>
@@ -20,13 +29,13 @@ function PlacesList({ places, refreshing, onRefresh }) {
       style={styles.list}
       data={places}
       keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <PlaceItem place={item} />}
+      renderItem={({ item }) => <PlaceItem place={item} onSelect={selectPlaceHandler}/>}
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-          colors={[Colors.primary]} // Colori dell'indicatore di aggiornamento
-          tintColor={Colors.primary} // Colore dell'indicatore di aggiornamento su iOS
+          colors="white" // Colori dell'indicatore di aggiornamento
+          tintColor="white" // Colore dell'indicatore di aggiornamento su iOS
         />
       }
     />

@@ -3,13 +3,13 @@ import { useContext, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import AppLoading from "expo-app-loading";
-import * as SplashScreen from "expo-splash-screen"; 
+import * as SplashScreen from "expo-splash-screen";
 
 import AllPlaces from "./screens/AllPlaces";
 import AddPlace from "./screens/AddPlace";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
+import PlaceDetails from "./screens/PlaceDetails";
 import IconButton from "./components/UI/IconButton";
 import { Colors } from "./constants/colors";
 import Map from "./screens/Map";
@@ -39,6 +39,7 @@ function AuthenticatedStack() {
       screenOptions={{
         headerStyle: { backgroundColor: Colors.primary500 },
         headerTintColor: Colors.gray700,
+        headerBackTitle: "Back",
         contentStyle: { backgroundColor: Colors.gray700 },
       }}
     >
@@ -73,6 +74,13 @@ function AuthenticatedStack() {
         }}
       />
       <Stack.Screen name="Map" component={Map} />
+      <Stack.Screen
+        name="PlaceDetails"
+        component={PlaceDetails}
+        options={{
+          title: "Loading Place...",
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -90,7 +98,7 @@ function Navigation() {
 
 function Root() {
   const [isTryingLogin, setIsTryingLogin] = useState(true);
-  const authCtx = useContext(AuthContext)
+  const authCtx = useContext(AuthContext);
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -119,7 +127,7 @@ function Root() {
     return null; // Rimuovi <AppLoading />
   }
 
-  return <Navigation />
+  return <Navigation />;
 }
 
 export default function App() {

@@ -69,3 +69,25 @@ export const fetchPlaces = async (token) => {
     throw error;
   }
 };
+
+export const fetchSinglePlace = async (token, placeId) => {
+  try {
+    const response = await axios.get(
+      firebaseConfig.databaseURL + `/places/${placeId}.json?auth=${token}`
+    );
+
+    const placeData = response.data;
+
+    return {
+      id: placeId,
+      title: placeData.title,
+      address: placeData.address,
+      date: new Date(placeData.date),
+      location: placeData.location,
+      image: placeData.imageUri
+    };
+  } catch (error) {
+    console.error("Errore durante il recupero del place:", error);
+    throw error;
+  }
+}
