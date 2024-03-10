@@ -2,52 +2,30 @@ import { ScrollView, Image, View, StyleSheet, Text } from "react-native";
 import { useState, useEffect, useContext } from "react";
 import OutlinedButton from "../components/UI/OutlinedButton";
 import { Colors } from "../constants/colors";
-import { fetchSinglePlace } from "../util/http";
-import { AuthContext } from "../store/auth-context";
-import LoadingOverlay from "../components/UI/LoadingOverlay";
-
 
 const PlaceDetails = ({ route, navigation }) => {
-  const [place, setPlace] = useState();
-
-  const authCtx = useContext(AuthContext);
-  const token = authCtx.token;
 
   const showOnMapHandler = () => {
     navigation.navigate('Map', {
-      initialLat: place.location.lat,
-      initialLng: place.location.lng,
+      initialLat: route.params.placeLocation.lat,
+      initialLng: route.params.placeLocation.lng,
     });
   };
 
   const selectedPlaceId = route.params.placeId;
 
-  useEffect(()=>{
-    async function loadPlaceData(){
-      const response = await fetchSinglePlace(token, selectedPlaceId);
-      setPlace(response)
-    }
-    loadPlaceData();
-  },[selectedPlaceId])
-
   useEffect(() => {
-    if (place && place.title) {
       navigation.setOptions({
-        title: place.title
+        title: route.params.placeTitle
       });
-    }
-  }, [place]);
-
-  if(!place){
-    return <LoadingOverlay message="Loading Place Data..." />
-  }
+  }, []);
 
   return (
     <ScrollView>
-      <Image style={styles.image} source={{ uri: place.image }} />
+      <Image style={styles.image} source={{ uri: route.params.placeImage }} />
       <View style={styles.locationContainer}>
         <View style={styles.addressContainer}>
-          <Text style={styles.address}>{place.address}</Text>
+          <Text style={styles.address}>{route.params.placeAddress}</Text>
         </View>
         <OutlinedButton icon="map" onPress={showOnMapHandler}>
           View on Map

@@ -8,9 +8,13 @@ import { useNavigation } from '@react-navigation/native';
 function PlacesList({ places, refreshing, onRefresh }) {
   const navigation = useNavigation();
 
-  const selectPlaceHandler = (id) => {
+  const selectPlaceHandler = (id, title, image, address, location) => {
     navigation.navigate('PlaceDetails', {
       placeId: id,
+      placeTitle: title,
+      placeImage: image,
+      placeAddress: address,
+      placeLocation: location
     });
   }
 

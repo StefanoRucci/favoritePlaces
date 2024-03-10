@@ -45,7 +45,7 @@ const PlaceForm = ({ onCreatePlace }) => {
   };
 
   if(isSubmitting) {
-    return <LoadingOverlay />
+    return <LoadingOverlay message="Adding place..."/>
   }
 
   return (
