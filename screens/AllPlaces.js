@@ -11,6 +11,7 @@ function AllPlaces({ route }) {
   const [loadedPlaces, setLoadedPlaces] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+  const [firstLoad, setFirstLoad] = useState(true); // Nuovo stato per il primo caricamento
   const isFocused = useIsFocused();
 
   const authCtx = useContext(AuthContext);
@@ -29,11 +30,12 @@ function AllPlaces({ route }) {
   };
 
   useEffect(() => {
-    if (isFocused) {
+    if (isFocused && (firstLoad || refreshing)) { // Controlla se è il primo caricamento o il refresh esplicito
       setRefreshing(true);
       getPlaces();
+      setFirstLoad(false); // Imposta il primo caricamento su false dopo il primo caricamento
     }
-  }, [isFocused, token]);
+  }, [isFocused, token, firstLoad, refreshing]);
 
   if(isFetching || refreshing){
     return <LoadingOverlay />
