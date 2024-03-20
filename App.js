@@ -2,8 +2,10 @@ import { StatusBar } from "expo-status-bar";
 import { useContext, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SplashScreen from "expo-splash-screen";
+import { Ionicons } from "@expo/vector-icons";
 
 import AllPlaces from "./screens/AllPlaces";
 import AddPlace from "./screens/AddPlace";
@@ -14,8 +16,11 @@ import IconButton from "./components/UI/IconButton";
 import { Colors } from "./constants/colors";
 import Map from "./screens/Map";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
+import UserScreen from "./screens/UserScreen";
+
 
 const Stack = createNativeStackNavigator();
+const BottomTabs = createBottomTabNavigator();
 
 function AuthStack() {
   return (
@@ -32,22 +37,26 @@ function AuthStack() {
   );
 }
 
-function AuthenticatedStack() {
+function HomePage() {
   const authCtx = useContext(AuthContext);
   return (
-    <Stack.Navigator
+    <BottomTabs.Navigator
       screenOptions={{
         headerStyle: { backgroundColor: Colors.primary500 },
         headerTintColor: Colors.gray700,
-        headerBackTitle: "Back",
-        contentStyle: { backgroundColor: Colors.gray700 },
+        tabBarStyle: { backgroundColor: Colors.primary500 },
+        tabBarActiveTintColor: "yellow",
       }}
     >
-      <Stack.Screen
+      <BottomTabs.Screen
         name="AllPlaces"
         component={AllPlaces}
         options={({ navigation }) => ({
-          title: "Your Favorite Places",
+          tabBarLabel: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
+          title: "Favorite Places",
           headerRight: ({ tintColor }) => (
             <IconButton
               icon="add"
@@ -65,6 +74,56 @@ function AuthenticatedStack() {
             />
           ),
         })}
+      />
+      <BottomTabs.Screen
+        name="UserScreen"
+        component={UserScreen}
+        options={{
+          title: "My Profile",
+          tabBarLabel: "Profile",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
+          ),
+        }}
+      />
+    </BottomTabs.Navigator>
+  );
+}
+
+function AuthenticatedStack() {
+  const authCtx = useContext(AuthContext);
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: Colors.primary500 },
+        headerTintColor: Colors.gray700,
+        headerBackTitle: "Back",
+        contentStyle: { backgroundColor: Colors.gray700 },
+      }}
+    >
+      <Stack.Screen
+        name="Homepage"
+        component={HomePage}
+        /* options={({ navigation }) => ({
+          title: "Your Favorite Places",
+          headerRight: ({ tintColor }) => (
+            <IconButton
+              icon="add"
+              size={24}
+              color={tintColor}
+              onPress={() => navigation.navigate("AddPlace")}
+            />
+          ),
+          headerLeft: ({ tintColor }) => (
+            <IconButton
+              icon="exit"
+              color={tintColor}
+              size={24}
+              onPress={authCtx.logout}
+            />
+          ),
+        })} */
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="AddPlace"
