@@ -47,6 +47,7 @@ function HomePage() {
         tabBarStyle: { backgroundColor: Colors.primary500 },
         tabBarActiveTintColor: "yellow",
       }}
+      sceneContainerStyle = { {backgroundColor: Colors.gray700} }
     >
       <BottomTabs.Screen
         name="AllPlaces"
@@ -104,25 +105,6 @@ function AuthenticatedStack() {
       <Stack.Screen
         name="Homepage"
         component={HomePage}
-        /* options={({ navigation }) => ({
-          title: "Your Favorite Places",
-          headerRight: ({ tintColor }) => (
-            <IconButton
-              icon="add"
-              size={24}
-              color={tintColor}
-              onPress={() => navigation.navigate("AddPlace")}
-            />
-          ),
-          headerLeft: ({ tintColor }) => (
-            <IconButton
-              icon="exit"
-              color={tintColor}
-              size={24}
-              onPress={authCtx.logout}
-            />
-          ),
-        })} */
         options={{ headerShown: false }}
       />
       <Stack.Screen
