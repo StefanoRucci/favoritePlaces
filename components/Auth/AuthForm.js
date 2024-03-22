@@ -1,14 +1,18 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import Button from '../UI/Button';
 import Input from './Input';
+
+import { AuthContext } from '../../store/auth-context';
 
 function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredConfirmEmail, setEnteredConfirmEmail] = useState('');
   const [enteredPassword, setEnteredPassword] = useState('');
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState('');
+
+  const authCtx = useContext(AuthContext);
 
   const {
     email: emailIsInvalid,
@@ -41,6 +45,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
       password: enteredPassword,
       confirmPassword: enteredConfirmPassword,
     });
+    authCtx.storeEmail(enteredEmail);
   }
 
   return (
