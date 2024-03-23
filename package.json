@@ -25,7 +25,8 @@
     "react-native": "^0.73.5",
     "react-native-maps": "1.10.0",
     "react-native-splash-screen": "^3.3.0",
-    "sharp": "^0.33.2"
+    "sharp": "^0.33.2",
+    "expo-linear-gradient": "~12.7.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

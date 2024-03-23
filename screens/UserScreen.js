@@ -1,10 +1,18 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Image, useWindowDimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  useWindowDimensions,
+  ImageBackground,
+} from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../store/auth-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SplashScreen from "expo-splash-screen";
 import { Colors } from "../constants/colors";
+import { LinearGradient } from "expo-linear-gradient";
 
 const UserScreen = () => {
   const authCtx = useContext(AuthContext);
@@ -44,21 +52,34 @@ const UserScreen = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.item}>
-        <Text>This is the profile page of this application!</Text>
-        <Text>
-          Actually you are logged as <Text style={styles.text}>{user}</Text> .
-        </Text>
-        <StatusBar style="auto" />
-      </View>
-      <View style={styles.imageContainer}>
+    <LinearGradient
+      colors={[Colors.primary800, Colors.primary100]}
+      style={styles.container}
+    >
+      <ImageBackground
+        source={require("../assets/images/profile.jpg")}
+        resizeMode="cover"
+        style={styles.container}
+        imageStyle={styles.backgroundImage}
+      >
+        <View style={styles.item}>
+          <Text style={styles.text}>
+            This is the profile page of this application!
+          </Text>
+          <Text style={styles.text}>
+            Actually you are logged as{" "}
+            <Text style={styles.userText}>{user}</Text> .
+          </Text>
+          <StatusBar style="auto" />
+        </View>
+        <View style={styles.imageContainer}>
           <Image
             style={[styles.image, imageStyle]}
-            source={require("../assets/app.jpg")}
+            source={require("../assets/images/app.jpg")}
           />
         </View>
-    </View>
+      </ImageBackground>
+    </LinearGradient>
   );
 };
 
@@ -67,12 +88,16 @@ export default UserScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: "100%",
     alignItems: "center",
     justifyContent: "center",
   },
-  text: {
+  userText: {
     fontWeight: "bold",
     //color: "red",
+  },
+  text: {
+    fontSize: 16,
   },
   item: {
     padding: 20,
@@ -97,5 +122,8 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+  },
+  backgroundImage:{
+    opacity: 0.7
   },
 });

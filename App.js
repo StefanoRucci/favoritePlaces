@@ -45,7 +45,7 @@ function HomePage() {
         headerStyle: { backgroundColor: Colors.primary500 },
         headerTintColor: Colors.gray700,
         tabBarStyle: { backgroundColor: Colors.primary500 },
-        tabBarActiveTintColor: "yellow",
+        tabBarActiveTintColor: Colors.selected,
       }}
       sceneContainerStyle = { {backgroundColor: Colors.gray700} }
     >
@@ -84,6 +84,14 @@ function HomePage() {
           tabBarLabel: "Profile",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person" size={size} color={color} />
+          ),
+          headerLeft: ({ tintColor }) => (
+            <IconButton
+              icon="exit"
+              color={tintColor}
+              size={24}
+              onPress={authCtx.logout}
+            />
           ),
         }}
       />

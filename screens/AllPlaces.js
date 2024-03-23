@@ -6,6 +6,8 @@ import { fetchPlaces } from "../util/http";
 import { useContext } from "react";
 import { AuthContext } from "../store/auth-context";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
+import { LinearGradient } from "expo-linear-gradient";
+import { Colors } from "../constants/colors";
 
 function AllPlaces({ route }) {
   const [loadedPlaces, setLoadedPlaces] = useState([]);
@@ -43,12 +45,15 @@ function AllPlaces({ route }) {
   };
 
   return (
+    <LinearGradient colors={[Colors.gray700, Colors.primary800]}>
+
     <PlacesList
       places={loadedPlaces}
       refreshing={refreshing}
       onRefresh={onRefresh}
       isFetching={isFetching}
-    />
+      />
+      </LinearGradient>
   );
 }
 
