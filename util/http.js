@@ -25,6 +25,7 @@ async function uploadImageToStorage(imageUri) {
 export const storePlace = async (place, token) => {
   const imageURL = await uploadImageToStorage(place.imageUri);
   place.imageUri = imageURL;
+  console.log(place);
   const response = await axios.post(
     firebaseConfig.databaseURL + "/places.json?auth=" + token,
     place
@@ -52,6 +53,7 @@ export const fetchPlaces = async (token) => {
         date: new Date(placeData.date),
         location: placeData.location,
         image: null,
+        email: placeData.email,
       };
       places.push(placeObj);
     }

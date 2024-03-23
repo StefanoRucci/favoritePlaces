@@ -28,6 +28,7 @@ function PlaceItem({ place, onSelect }) {
         <Text style={styles.title}>{place.title}</Text>
         <Text style={styles.address}>{place.address}</Text>
         <Text style={styles.date}>{date}</Text>
+        <Text style={styles.date}>{place.email}</Text>
       </View>
     </Pressable>
   );

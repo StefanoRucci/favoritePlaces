@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 import { Place } from "../../models/Place";
@@ -11,16 +11,38 @@ import { useContext } from "react";
 import { AuthContext } from "../../store/auth-context";
 import { storePlace } from "../../util/http";
 import LoadingOverlay from "../UI/LoadingOverlay";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SplashScreen from "expo-splash-screen";
+
+
 
 const PlaceForm = ({ onCreatePlace }) => {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [selectedImage, setSelectedImage] = useState();
   const [pickedLocation, setPickedLocation] = useState();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [user, setUser] = useState();
 
   const authCtx = useContext(AuthContext);
   const token = authCtx.token;
+  const email = authCtx.email;
 
+  useEffect(() => {
+    const initializeApp = async () => {
+      try {
+        // Nascondi lo splash screen
+        await SplashScreen.hideAsync();
+
+        // Carica il token salvato in AsyncStorage
+        const storedEmail = await AsyncStorage.getItem("email");
+        setUser(storedEmail);
+      } catch (error) {
+        console.error("Error initializing app:", error);
+      }
+    };
+    initializeApp();
+  }, []);
+  
   const changeTitleHandler = (enteredText) => {
     setEnteredTitle(enteredText);
   };
@@ -34,7 +56,7 @@ const PlaceForm = ({ onCreatePlace }) => {
   }, []);
 
   const savePlaceHandler = async() => {
-    const placeData = new Place(enteredTitle, selectedImage, pickedLocation);
+    const placeData = new Place(enteredTitle, selectedImage, pickedLocation, user);
     try{
       setIsSubmitting(true);
       const id = await storePlace(placeData, token);

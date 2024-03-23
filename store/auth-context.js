@@ -52,6 +52,7 @@ function AuthContextProvider({ children }) {
 
   const value = {
     token: authToken,
+    email: authEmail,
     isAuthenticated: !!authToken,
     storeEmail: storeEmail,
     authenticate: authenticate,
