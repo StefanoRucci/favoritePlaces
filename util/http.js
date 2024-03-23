@@ -25,7 +25,7 @@ async function uploadImageToStorage(imageUri) {
 export const storePlace = async (place, token) => {
   const imageURL = await uploadImageToStorage(place.imageUri);
   place.imageUri = imageURL;
-  console.log(place);
+  //console.log(place);
   const response = await axios.post(
     firebaseConfig.databaseURL + "/places.json?auth=" + token,
     place
