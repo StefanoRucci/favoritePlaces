@@ -14,6 +14,7 @@ function AllPlaces({ route }) {
   const [refreshing, setRefreshing] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
   const [firstLoad, setFirstLoad] = useState(true); // Nuovo stato per il primo caricamento
+  const [gradientLoaded, setGradientLoaded] = useState(false); // Stato per tracciare il caricamento del gradiente
   const isFocused = useIsFocused();
 
   const authCtx = useContext(AuthContext);
@@ -32,10 +33,22 @@ function AllPlaces({ route }) {
   };
 
   useEffect(() => {
-    if (isFocused && (firstLoad || refreshing)) { // Controlla se è il primo caricamento o il refresh esplicito
+    const loadGradient = async () => {
+      // Simula un ritardo nel caricamento del gradiente
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setGradientLoaded(true);
+    };
+
+    if (!gradientLoaded) {
+      loadGradient();
+    }
+  }, [gradientLoaded]);
+
+  useEffect(() => {
+    if (isFocused && (firstLoad || refreshing)) {
       setRefreshing(true);
       getPlaces();
-      setFirstLoad(false); // Imposta il primo caricamento su false dopo il primo caricamento
+      setFirstLoad(false);
     }
   }, [isFocused, token, firstLoad, refreshing]);
 
@@ -44,16 +57,19 @@ function AllPlaces({ route }) {
     getPlaces();
   };
 
+  if (!gradientLoaded) {
+    return <LoadingOverlay message="Loading ..." />;
+  }
+
   return (
     <LinearGradient colors={[Colors.gray700, Colors.primary800]}>
-
-    <PlacesList
-      places={loadedPlaces}
-      refreshing={refreshing}
-      onRefresh={onRefresh}
-      isFetching={isFetching}
+      <PlacesList
+        places={loadedPlaces}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        isFetching={isFetching}
       />
-      </LinearGradient>
+    </LinearGradient>
   );
 }
 
