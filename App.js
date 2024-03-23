@@ -37,6 +37,41 @@ function AuthStack() {
   );
 }
 
+function AuthenticatedStack() {
+  const authCtx = useContext(AuthContext);
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: Colors.primary500 },
+        headerTintColor: Colors.gray700,
+        headerBackTitle: "Back",
+        contentStyle: { backgroundColor: Colors.gray700 },
+      }}
+    >
+      <Stack.Screen
+        name="Homepage"
+        component={HomePage}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="AddPlace"
+        component={AddPlace}
+        options={{
+          title: "Add a new Place",
+        }}
+      />
+      <Stack.Screen name="Map" component={Map} />
+      <Stack.Screen
+        name="PlaceDetails"
+        component={PlaceDetails}
+        options={{
+          title: "Loading Place...",
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 function HomePage() {
   const authCtx = useContext(AuthContext);
   return (
@@ -99,41 +134,6 @@ function HomePage() {
   );
 }
 
-function AuthenticatedStack() {
-  const authCtx = useContext(AuthContext);
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: Colors.primary500 },
-        headerTintColor: Colors.gray700,
-        headerBackTitle: "Back",
-        contentStyle: { backgroundColor: Colors.gray700 },
-      }}
-    >
-      <Stack.Screen
-        name="Homepage"
-        component={HomePage}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="AddPlace"
-        component={AddPlace}
-        options={{
-          title: "Add a new Place",
-        }}
-      />
-      <Stack.Screen name="Map" component={Map} />
-      <Stack.Screen
-        name="PlaceDetails"
-        component={PlaceDetails}
-        options={{
-          title: "Loading Place...",
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
 function Navigation() {
   const authCtx = useContext(AuthContext);
 
@@ -152,20 +152,14 @@ function Root() {
   useEffect(() => {
     const initializeApp = async () => {
       try {
-        // Nascondi lo splash screen
         await SplashScreen.hideAsync();
-
-        // Carica il token salvato in AsyncStorage
         const storedToken = await AsyncStorage.getItem("token");
-
         if (storedToken) {
-          // Se il token esiste, autentica l'utente
           authCtx.authenticate(storedToken);
         }
       } catch (error) {
         console.error("Error initializing app:", error);
       } finally {
-        // Una volta completata l'inizializzazione, imposta isTryingLogin a false
         setIsTryingLogin(false);
       }
     };
@@ -173,7 +167,7 @@ function Root() {
   }, []);
 
   if (isTryingLogin) {
-    return null; // Rimuovi <AppLoading />
+    return null; 
   }
 
   return <Navigation />;

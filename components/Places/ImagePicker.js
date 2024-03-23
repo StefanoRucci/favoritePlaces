@@ -38,8 +38,8 @@ const ImagePicker = ({ onTakeImage }) => {
 
     const image = await launchCameraAsync({
       allowsEditing: true,
-      aspect: [16, 9],
-      quality: 0.1,
+      aspect: [4, 3],
+      quality: 0.8,
     });
     if (!image.canceled) {
       setPickedImage(image.assets[0].uri);

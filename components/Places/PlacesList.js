@@ -42,7 +42,7 @@ function PlacesList({ places, refreshing, onRefresh, isFetching }) {
         <RefreshControl
           refreshing={refreshing}
           onRefresh={onRefresh}
-          colors="white" // Colori dell'indicatore di aggiornamento
+          //colors="white" // Colori dell'indicatore di aggiornamento
           tintColor="white" // Colore dell'indicatore di aggiornamento su iOS
         />
       }

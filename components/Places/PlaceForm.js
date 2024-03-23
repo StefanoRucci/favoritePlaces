@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, View, Alert } from "react-native";
 
 import { Place } from "../../models/Place";
 import { Colors } from "../../constants/colors";
@@ -13,8 +13,6 @@ import { storePlace } from "../../util/http";
 import LoadingOverlay from "../UI/LoadingOverlay";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SplashScreen from "expo-splash-screen";
-
-
 
 const PlaceForm = ({ onCreatePlace }) => {
   const [enteredTitle, setEnteredTitle] = useState("");
@@ -42,7 +40,7 @@ const PlaceForm = ({ onCreatePlace }) => {
     };
     initializeApp();
   }, []);
-  
+
   const changeTitleHandler = (enteredText) => {
     setEnteredTitle(enteredText);
   };
@@ -55,19 +53,41 @@ const PlaceForm = ({ onCreatePlace }) => {
     setPickedLocation(location);
   }, []);
 
-  const savePlaceHandler = async() => {
+  const savePlaceHandler = async () => {
+    // Controlla se il titolo è vuoto
+    if (!enteredTitle) {
+      Alert.alert('Error', 'Please enter a title for the place.');
+      return;
+    }
+  
+    // Controlla se l'immagine è stata selezionata
+    if (!selectedImage) {
+      Alert.alert('Error', 'Please take an image for the place.');
+      return;
+    }
+  
+    // Controlla se la posizione è stata scelta
+    if (!pickedLocation) {
+      Alert.alert('Error', 'Please pick a location for the place.');
+      return;
+    }
+  
+    // Tutte le validazioni sono passate, quindi procedi con il salvataggio del luogo
     const placeData = new Place(enteredTitle, selectedImage, pickedLocation, user);
-    try{
+    try {
       setIsSubmitting(true);
       const id = await storePlace(placeData, token);
-    }catch(err){
-      console.log(err)
+      onCreatePlace(placeData);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsSubmitting(false);
     }
-    onCreatePlace(placeData);
   };
+  
 
-  if(isSubmitting) {
-    return <LoadingOverlay message="Adding place..."/>
+  if (isSubmitting) {
+    return <LoadingOverlay message="Adding place..." />;
   }
 
   return (
