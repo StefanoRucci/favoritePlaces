@@ -6,6 +6,7 @@ import {
   Image,
   useWindowDimensions,
   ImageBackground,
+  ScrollView,
 } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../store/auth-context";
@@ -22,13 +23,13 @@ const UserScreen = () => {
 
   let imageSize = 300;
 
-  if (width < 300) {
+  /* if (width < 300) {
     imageSize = 150;
   }
 
   if (height < 400) {
-    imageSize = 80;
-  }
+    imageSize = 300;
+  } */
 
   const imageStyle = {
     width: imageSize,
@@ -62,22 +63,24 @@ const UserScreen = () => {
         style={styles.container}
         imageStyle={styles.backgroundImage}
       >
-        <View style={styles.item}>
-          <Text style={styles.text}>
-            This is the profile page of this application!
-          </Text>
-          <Text style={styles.text}>
-            Actually you are logged as{" "}
-            <Text style={styles.userText}>{user}</Text> .
-          </Text>
-          <StatusBar style="auto" />
-        </View>
-        <View style={styles.imageContainer}>
-          <Image
-            style={[styles.image, imageStyle]}
-            source={require("../assets/images/app.jpg")}
-          />
-        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.item}>
+            <Text style={styles.text}>
+              This is the profile page of this application!
+            </Text>
+            <Text style={styles.text}>
+              Actually you are logged as{" "}
+              <Text style={styles.userText}>{user}</Text> .
+            </Text>
+            <StatusBar style="auto" />
+          </View>
+          <View style={styles.imageContainer}>
+            <Image
+              style={[styles.image, imageStyle]}
+              source={require("../assets/images/app.jpg")}
+            />
+          </View>
+        </ScrollView>
       </ImageBackground>
     </LinearGradient>
   );
@@ -102,7 +105,7 @@ const styles = StyleSheet.create({
   item: {
     padding: 20,
     borderRadius: 6,
-    marginVertical: 12,
+    marginTop: 50,
     backgroundColor: Colors.primary500,
     elevation: 2,
     shadowColor: "black",
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  backgroundImage:{
-    opacity: 0.7
+  backgroundImage: {
+    opacity: 0.7,
   },
 });

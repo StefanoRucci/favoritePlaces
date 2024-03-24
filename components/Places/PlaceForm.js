@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, View, Alert } from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, View, Alert, useWindowDimensions } from "react-native";
 
 import { Place } from "../../models/Place";
 import { Colors } from "../../constants/colors";
@@ -24,6 +24,8 @@ const PlaceForm = ({ onCreatePlace }) => {
   const authCtx = useContext(AuthContext);
   const token = authCtx.token;
   const email = authCtx.email;
+
+  const { width, height } = useWindowDimensions();
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -90,8 +92,11 @@ const PlaceForm = ({ onCreatePlace }) => {
     return <LoadingOverlay message="Adding place..." />;
   }
 
+  const marginHorizontalDistance = height < 400 ? 200 : 24;
+  const marginBottomDistance = height < 400 ? 50 : 24;
+
   return (
-    <ScrollView style={styles.form}>
+    <ScrollView style={[styles.form, {marginHorizontal: marginHorizontalDistance, marginBottom:marginBottomDistance}]}>
       <View>
         <Text style={styles.label}>Title</Text>
         <TextInput
@@ -112,7 +117,8 @@ export default PlaceForm;
 const styles = StyleSheet.create({
   form: {
     flex: 1,
-    padding: 24,
+    //padding: 24,
+    marginTop: 24,
   },
   label: {
     fontWeight: "bold",

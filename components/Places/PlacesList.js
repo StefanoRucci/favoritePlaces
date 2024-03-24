@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, View, RefreshControl } from 'react-native';
+import { FlatList, StyleSheet, Text, View, RefreshControl, useWindowDimensions } from 'react-native';
 import { Colors } from '../../constants/colors';
 import PlaceItem from './PlaceItem';
 import { useNavigation } from '@react-navigation/native';
@@ -7,6 +7,7 @@ import LoadingOverlay from '../UI/LoadingOverlay';
 
 function PlacesList({ places, refreshing, onRefresh, isFetching }) {
   const navigation = useNavigation();
+  const { width, height } = useWindowDimensions();
 
   const selectPlaceHandler = (id, title, image, address, location) => {
     navigation.navigate('PlaceDetails', {
@@ -32,9 +33,12 @@ function PlacesList({ places, refreshing, onRefresh, isFetching }) {
     );
   }
 
+  const marginHorizontalDistance = height < 400 ? 100 : 24;
+  const marginTopDistance = height < 400 ? 20 : 24;
+
   return (
     <FlatList
-      style={styles.list}
+      style={{marginHorizontal: marginHorizontalDistance, marginTop: marginTopDistance}}
       data={places}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <PlaceItem place={item} onSelect={selectPlaceHandler}/>}
@@ -53,9 +57,9 @@ function PlacesList({ places, refreshing, onRefresh, isFetching }) {
 export default PlacesList;
 
 const styles = StyleSheet.create({
-  list: {
+  /* list: {
     margin: 24,
-  },
+  }, */
   fallbackContainer: {
     flex: 1,
     justifyContent: 'center',

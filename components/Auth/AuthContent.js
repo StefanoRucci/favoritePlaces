@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   StyleSheet,
   View,
   TouchableWithoutFeedback,
   Keyboard,
+  useWindowDimensions,
+  ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -14,6 +16,8 @@ import { Colors } from "../../constants/colors";
 
 function AuthContent({ isLogin, onAuthenticate }) {
   const navigation = useNavigation();
+
+  const { width, height } = useWindowDimensions();
 
   const [credentialsInvalid, setCredentialsInvalid] = useState({
     email: false,
@@ -58,36 +62,47 @@ function AuthContent({ isLogin, onAuthenticate }) {
     onAuthenticate({ email, password });
   }
 
+  const marginHorizontalDistance = height < 400 ? 200 : 32;
+  const marginBottomDistance = height < 400 ? 50 : 0;
+
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <View style={styles.authContent}>
-          <AuthForm
-            isLogin={isLogin}
-            onSubmit={submitHandler}
-            credentialsInvalid={credentialsInvalid}
-          />
-          <View style={styles.buttons}>
-            <FlatButton onPress={switchAuthModeHandler}>
-              {isLogin ? "Create a new user" : "Log in instead"}
-            </FlatButton>
+    <ScrollView>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View
+          style={[
+            styles.container,
+            { marginHorizontal: marginHorizontalDistance, marginBottom: marginBottomDistance },
+          ]}
+        >
+          <View style={styles.authContent}>
+            <AuthForm
+              isLogin={isLogin}
+              onSubmit={submitHandler}
+              credentialsInvalid={credentialsInvalid}
+            />
+            <View style={styles.buttons}>
+              <FlatButton onPress={switchAuthModeHandler}>
+                {isLogin ? "Create a new user" : "Log in instead"}
+              </FlatButton>
+            </View>
           </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </ScrollView>
   );
 }
 
 export default AuthContent;
 
+//const deviceHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
   },
   authContent: {
     marginTop: 32,
-    marginHorizontal: 32,
     padding: 16,
     borderRadius: 8,
     backgroundColor: Colors.primary800,
