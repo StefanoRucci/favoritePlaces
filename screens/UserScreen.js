@@ -11,7 +11,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../store/auth-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as SplashScreen from "expo-splash-screen";
+//import * as SplashScreen from "expo-splash-screen";
 import { Colors } from "../constants/colors";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -40,7 +40,7 @@ const UserScreen = () => {
     const initializeApp = async () => {
       try {
         // Nascondi lo splash screen
-        await SplashScreen.hideAsync();
+        //await SplashScreen.hideAsync();
 
         // Carica il token salvato in AsyncStorage
         const storedEmail = await AsyncStorage.getItem("email");

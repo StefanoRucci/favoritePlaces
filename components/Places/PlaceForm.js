@@ -12,7 +12,7 @@ import { AuthContext } from "../../store/auth-context";
 import { storePlace } from "../../util/http";
 import LoadingOverlay from "../UI/LoadingOverlay";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as SplashScreen from "expo-splash-screen";
+//import * as SplashScreen from "expo-splash-screen";
 
 const PlaceForm = ({ onCreatePlace }) => {
   const [enteredTitle, setEnteredTitle] = useState("");
@@ -31,7 +31,7 @@ const PlaceForm = ({ onCreatePlace }) => {
     const initializeApp = async () => {
       try {
         // Nascondi lo splash screen
-        await SplashScreen.hideAsync();
+        //await SplashScreen.hideAsync();
 
         // Carica il token salvato in AsyncStorage
         const storedEmail = await AsyncStorage.getItem("email");
