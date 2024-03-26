@@ -6,7 +6,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 //import * as SplashScreen from "expo-splash-screen";
 import { Ionicons } from "@expo/vector-icons";
-import { Alert } from "react-native";
 import AllPlaces from "./screens/AllPlaces";
 import AddPlace from "./screens/AddPlace";
 import LoginScreen from "./screens/LoginScreen";
@@ -23,12 +22,6 @@ const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
 
 function AuthStack() {
-  useEffect(()=>{
-    Alert.alert(
-      "StartAuth!",
-      "StartAuth"
-    );
-  },[])
   return (
     <Stack.Navigator
       screenOptions={{
@@ -143,10 +136,6 @@ function HomePage() {
 function Navigation() {
   const authCtx = useContext(AuthContext);
 
-  useEffect(()=>{
-    console.log("IS AUTHENTICATED = ", authCtx.isAuthenticated)
-  },[])
-
   return (
     <NavigationContainer>
       {!authCtx.isAuthenticated && <AuthStack />}
@@ -159,24 +148,13 @@ function Root() {
   const [isTryingLogin, setIsTryingLogin] = useState(true);
   const authCtx = useContext(AuthContext);
 
-  console.log("start");
-
   useEffect(() => {
-    Alert.alert(
-      "Start!",
-      "Start"
-    );
     const initializeApp = async () => {
       try {
         //await SplashScreen.hideAsync();
         const storedToken = await AsyncStorage.getItem("token");
-        console.log("SONO NEL PRIMO TRY",storedToken);
         if (storedToken) {
-          console.log("SONO NELL'IF")
           authCtx.authenticate(storedToken);
-        }
-        else{
-          console.log("SONO NELL'ELSE")
         }
       } catch (error) {
         console.error("Error initializing app:", error);
