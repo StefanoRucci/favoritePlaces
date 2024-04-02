@@ -21,7 +21,7 @@
     "android": {
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyDMnOxLE7mVEUTFOPH9YRrfy5waYX4OUjY"
+          "apiKey": "Inserisci qui api_key"
         }
       },
       "versionCode": 1,
