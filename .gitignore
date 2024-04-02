@@ -33,3 +33,7 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Ignorare i file con keys nei commit
+app.json
+util/location.js
